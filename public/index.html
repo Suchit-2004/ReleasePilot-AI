@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <title>ReleasePilot AI | Release Intelligence</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">
+      <span class="brand-mark">R</span>
+      <span>ReleasePilot <span class="accent">AI</span></span>
+    </a>
+    <span class="local-badge"><span class="dot"></span> LOCAL ANALYSIS</span>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="eyebrow">RELEASE INTELLIGENCE PLATFORM</p>
+      <h1>Ship with <span class="accent">confidence.</span></h1>
+      <p class="subtitle">
+        Analyze deployment logs, identify release blockers, and get
+        actionable recommendations in seconds.
+      </p>
+    </section>
+
+    <section class="workspace">
+      <div class="panel input-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">01 / INPUT</p>
+            <h2>Deployment log</h2>
+          </div>
+          <span class="step-tag">LOG ANALYZER</span>
+        </div>
+
+        <label class="upload-zone" for="logFile">
+          <span class="upload-icon">↑</span>
+          <strong>Choose a log file</strong>
+          <span class="muted">.log or .txt · Maximum 1 MB</span>
+          <input id="logFile" type="file" accept=".log,.txt,text/plain">
+        </label>
+
+        <div class="field-label">
+          <label for="logInput">Or paste your log content</label>
+          <button id="sampleBtn" class="text-button" type="button">
+            Load sample
+          </button>
+        </div>
+
+        <textarea id="logInput" spellcheck="false"
+          placeholder="[INFO] Starting release validation&#10;[ERROR] Test failed: AccountServiceTest"></textarea>
+
+        <p id="fileName" class="muted small">No file selected</p>
+
+        <button id="analyzeBtn" class="primary-button" type="button">
+          Analyze deployment log <span>→</span>
+        </button>
+        <p id="message" class="message" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="panel result-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">02 / INTELLIGENCE</p>
+            <h2>Release assessment</h2>
+          </div>
+          <span id="resultState" class="step-tag">AWAITING LOG</span>
+        </div>
+
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">◎</div>
+          <h3>Your report starts here</h3>
+          <p>Submit a log to see the risk score, detected issues, and recommended actions.</p>
+        </div>
+
+        <div id="results" hidden>
+          <div class="risk-card">
+            <div>
+              <p class="muted small">DEPLOYMENT RISK SCORE</p>
+              <div class="score-line">
+                <span id="riskScore" class="risk-score">0</span>
+                <span class="muted">/ 100</span>
+              </div>
+              <span id="riskLevel" class="risk-level">MINIMAL</span>
+            </div>
+            <div class="risk-ring" id="riskRing">
+              <span id="ringScore">0</span>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="muted small">TOTAL FINDINGS</span>
+              <strong id="totalFindings">0</strong>
+            </div>
+            <div class="stat-card">
+              <span class="muted small">HIGH SEVERITY</span>
+              <strong id="highCount">0</strong>
+            </div>
+            <div class="stat-card">
+              <span class="muted small">MEDIUM</span>
+              <strong id="mediumCount">0</strong>
+            </div>
+          </div>
+
+          <div class="findings-heading">
+            <h3>Detected issues</h3>
+            <span id="lineCount" class="muted small">0 lines</span>
+          </div>
+
+          <div id="findingsList" class="findings-list"></div>
+
+          <button id="exportBtn" class="secondary-button" type="button">
+            Export JSON report ↓
+          </button>
+          <p id="disclaimer" class="muted small disclaimer"></p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>ReleasePilot AI · Hackathon prototype</span>
+      <span>Local analysis · No live deployment access</span>
+    </footer>
+  </main>
+</body>
+</html>

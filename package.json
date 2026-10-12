@@ -1,0 +1,16 @@
+{
+  "name": "releasepilot-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local deployment-log diagnostics for Copado release workflows",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "test": "node --test",
+    "analyze:sample": "node src/analyzer.js samples/deployment.log"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

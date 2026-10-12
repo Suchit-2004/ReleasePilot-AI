@@ -1,0 +1,6 @@
+[INFO] Starting release validation
+[INFO] Checking metadata components
+[ERROR] Component not found: AccountSummary
+[ERROR] Test failed: AccountServiceTest
+[WARN] Deployment timed out after 120 seconds
+[INFO] Diagnostic sample completed

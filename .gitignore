@@ -1,0 +1,21 @@
+﻿# Node.js dependencies
+node_modules/
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+
+# Build and test output
+coverage/
+dist/
+build/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Agentia local configuration
+.agentia/config.user.json
+.agentia/index
+.agentia/apex.tests.*.json
