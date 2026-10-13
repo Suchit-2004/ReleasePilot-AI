@@ -1,0 +1,44 @@
+{
+  "tool": "ReleasePilot AI",
+  "mode": "local-log-analysis",
+  "analyzedAt": "2026-10-13T13:48:53.297Z",
+  "riskAssessment": {
+    "score": 95,
+    "level": "HIGH",
+    "explanation": "Score is based on detected log patterns, not a live deployment prediction."
+  },
+  "summary": {
+    "linesAnalyzed": 6,
+    "findings": 3,
+    "high": 2,
+    "medium": 1,
+    "status": "issues-detected"
+  },
+  "findings": [
+    {
+      "ruleId": "MISSING_COMPONENT",
+      "severity": "high",
+      "title": "Missing component or dependency",
+      "line": 3,
+      "evidence": "[ERROR] Component not found: AccountSummary",
+      "recommendation": "Verify component names, file paths, package dependencies, and deployment contents."
+    },
+    {
+      "ruleId": "TEST_FAILURE",
+      "severity": "high",
+      "title": "Automated test failure",
+      "line": 4,
+      "evidence": "[ERROR] Test failed: AccountServiceTest",
+      "recommendation": "Inspect the failing test, expected versus actual values, and the related code changes."
+    },
+    {
+      "ruleId": "TIMEOUT",
+      "severity": "medium",
+      "title": "Operation timed out",
+      "line": 5,
+      "evidence": "[WARN] Deployment timed out after 120 seconds",
+      "recommendation": "Check service availability, job duration, network connectivity, and configured time limits."
+    }
+  ],
+  "disclaimer": "Local pattern-based diagnostics only; this is not a live Copado deployment status."
+}
