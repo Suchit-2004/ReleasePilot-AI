@@ -29,7 +29,6 @@ sampleBtn.addEventListener("click", () => {
 
 logFile.addEventListener("change", async () => {
   const file = logFile.files?.[0];
-
   if (!file) return;
 
   if (file.size > 1024 * 1024) {
@@ -50,9 +49,52 @@ logFile.addEventListener("change", async () => {
 function addText(parent, tag, className, text) {
   const element = document.createElement(tag);
   if (className) element.className = className;
-  element.textContent = text;
+  element.textContent = String(text ?? "");
   parent.appendChild(element);
   return element;
+}
+
+function renderAiAnalysis(ai) {
+  const status = document.querySelector("#aiStatus");
+  const summary = document.querySelector("#aiSummary");
+  const details = document.querySelector("#aiDetails");
+
+  details.replaceChildren();
+
+  if (!ai || ai.status !== "available") {
+    status.textContent = "LOCAL FALLBACK";
+    status.className = "step-tag ai-status-warning";
+    summary.textContent =
+      ai?.message || "AI analysis is unavailable. Local findings are still shown.";
+    return;
+  }
+
+  status.textContent = "GEMINI ACTIVE";
+  status.className = "step-tag ai-status-ok";
+  summary.textContent = ai.summary || "No AI summary was returned.";
+
+  const sections = [
+    ["Likely root causes", ai.likelyRootCauses],
+    ["Recommended actions", ai.recommendedActions],
+    ["Caveats and verification", ai.caveats]
+  ];
+
+  for (const [heading, items] of sections) {
+    if (!Array.isArray(items) || items.length === 0) continue;
+
+    const section = document.createElement("section");
+    section.className = "ai-section";
+    addText(section, "h4", "", heading);
+
+    const list = document.createElement("ul");
+
+    for (const item of items) {
+      addText(list, "li", "", item);
+    }
+
+    section.appendChild(list);
+    details.appendChild(section);
+  }
 }
 
 function renderReport(report) {
@@ -104,10 +146,7 @@ function renderReport(report) {
     const top = document.createElement("div");
     top.className = "finding-top";
 
-    const heading = document.createElement("h4");
-    heading.textContent = finding.title;
-    top.appendChild(heading);
-
+    addText(top, "h4", "", finding.title);
     addText(
       top,
       "span",
@@ -123,9 +162,7 @@ function renderReport(report) {
       "muted small",
       `${finding.ruleId} · Line ${finding.line}`
     );
-
     addText(card, "p", "evidence", finding.evidence);
-
     addText(
       card,
       "p",
@@ -137,7 +174,9 @@ function renderReport(report) {
   }
 
   document.querySelector("#disclaimer").textContent =
-    report.disclaimer + " " + report.riskAssessment.explanation;
+    `${report.disclaimer} ${report.riskAssessment.explanation}`;
+
+  renderAiAnalysis(report.aiAnalysis);
 }
 
 analyzeBtn.addEventListener("click", async () => {
@@ -150,7 +189,8 @@ analyzeBtn.addEventListener("click", async () => {
 
   analyzeBtn.disabled = true;
   analyzeBtn.textContent = "Analyzing...";
-  message.textContent = "";
+  message.textContent = "Running local checks and requesting AI analysis...";
+  message.style.color = "#92a0bb";
 
   try {
     const response = await fetch("/api/analyze", {
@@ -166,16 +206,22 @@ analyzeBtn.addEventListener("click", async () => {
     }
 
     renderReport(data);
-    message.textContent = "Analysis completed successfully.";
-    message.style.color = "#53d6a0";
+
+    if (data.aiAnalysis?.status === "available") {
+      message.textContent = "Local checks and Gemini AI analysis completed.";
+      message.style.color = "#53d6a0";
+    } else {
+      message.textContent =
+        "Local analysis completed. Gemini is unavailable; see the AI panel.";
+      message.style.color = "#ffcf83";
+    }
   } catch (error) {
     message.textContent =
       `${error.message} Check that the local server is running.`;
     message.style.color = "#ff999f";
   } finally {
     analyzeBtn.disabled = false;
-    analyzeBtn.innerHTML =
-      'Analyze deployment log <span>→</span>';
+    analyzeBtn.textContent = "Analyze deployment log →";
   }
 });
 

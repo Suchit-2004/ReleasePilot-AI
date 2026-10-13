@@ -2,15 +2,15 @@
   "name": "releasepilot-ai",
   "version": "1.0.0",
   "private": true,
-  "description": "Local deployment-log diagnostics for Copado release workflows",
+  "description": "AI-powered deployment-log diagnostics for Copado release workflows",
   "type": "module",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "node src/server.js",
+    "start": "node --env-file-if-exists=.env src/server.js",
+    "dev": "node --watch --env-file-if-exists=.env src/server.js",
     "test": "node --test",
-    "analyze:sample": "node src/analyzer.js samples/deployment.log"
+    "analyze:sample": "node --env-file-if-exists=.env src/analyzer.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   }
 }
