@@ -1,134 +1,126 @@
-﻿# ReleasePilot AI 🚀
+# ReleasePilot AI 🚀
+
 ### AI-Powered Deployment Diagnostics for Copado Release Workflows
 
-**Identify deployment blockers. Understand likely root causes. Ship with greater confidence.**
+**Identify deployment blockers. Understand likely root causes. Ship with
+greater confidence.**
 
-ReleasePilot AI is an AI-assisted deployment-log diagnostics platform that combines deterministic log analysis with Google's Gemini API to help developers identify common deployment failures, assess potential release risk, and receive actionable troubleshooting recommendations.
+ReleasePilot AI is an AI-assisted deployment-log diagnostics platform.
+It combines deterministic local log analysis with Google's Gemini API to
+identify common deployment issues, estimate a heuristic risk score, and
+provide troubleshooting guidance.
 
-It provides an interactive web dashboard where users can upload or paste deployment logs, inspect detected issues, review a risk score, and explore AI-generated explanations in one place.
-
-> **Project status:** Hackathon prototype. Local deployment-log analysis and Gemini AI explanations are implemented. A live Copado or Salesforce deployment connection is not currently implemented.
-
----
+> **Project status:** Hackathon prototype. Local log analysis and
+> Gemini-assisted explanations are implemented. A live Copado or
+> Salesforce deployment connection is not currently implemented.
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Problem Statement](#problem-statement)
-- [Our Solution](#our-solution)
-- [Key Features](#key-features)
-- [How It Works](#how-it-works)
-- [System Architecture](#system-architecture)
-- [Application Workflow](#application-workflow)
-- [Risk Scoring](#risk-scoring)
-- [Technology Stack](#technology-stack)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Environment Configuration](#environment-configuration)
-- [Using the Dashboard](#using-the-dashboard)
-- [API Documentation](#api-documentation)
-- [Testing](#testing)
-- [Security and Privacy](#security-and-privacy)
-- [Limitations](#limitations)
-- [Future Roadmap](#future-roadmap)
-- [Contributing](#contributing)
-- [License](#license)
-
----
+-   [Overview](#overview)
+-   [Problem Statement](#problem-statement)
+-   [Solution](#solution)
+-   [Features](#features)
+-   [How It Works](#how-it-works)
+-   [Architecture](#architecture)
+-   [Risk Scoring](#risk-scoring)
+-   [Technology Stack](#technology-stack)
+-   [Project Structure](#project-structure)
+-   [Getting Started](#getting-started)
+-   [Using the Dashboard](#using-the-dashboard)
+-   [API Documentation](#api-documentation)
+-   [Testing](#testing)
+-   [Security and Privacy](#security-and-privacy)
+-   [Limitations](#limitations)
+-   [Roadmap](#roadmap)
+-   [Contributing](#contributing)
+-   [License](#license)
 
 ## Overview
 
-Software deployment failures can involve missing components, failed automated tests, permission problems, dependency issues, or timeouts. Investigating these failures manually can slow down development and release workflows.
+Deployment failures can involve missing components, failed automated
+tests, permission problems, dependency errors, or timeouts. Manually
+inspecting logs to find the important messages can slow down
+troubleshooting.
 
-ReleasePilot AI helps developers make sense of deployment logs through two complementary approaches:
+ReleasePilot AI provides two complementary layers:
 
-- **Rule-based diagnostics:** identifies predefined error patterns, extracts relevant evidence, and calculates a deterministic risk score.
-- **Gemini AI analysis:** interprets detected findings and generates likely root causes, recommended actions, and verification caveats.
-
-The result is a unified diagnostic report that combines predictable local checks with AI-assisted troubleshooting.
+1.  **Rule-based diagnostics** identify supported error patterns,
+    extract evidence, and calculate a deterministic risk score.
+2.  **Gemini AI analysis** interprets structured findings and suggests
+    likely root causes, recommended actions, and caveats.
 
 ### Project at a glance
 
-| Attribute | Details |
-|---|---|
-| Project name | ReleasePilot AI |
-| Category | AI / Developer Tools / DevOps |
-| Application type | Web-based diagnostic dashboard |
-| Backend | Node.js built-in HTTP server |
-| Frontend | HTML, CSS, JavaScript |
-| AI provider | Google Gemini API |
-| Analysis mode | Local log analysis + optional AI analysis |
-| Input formats | Pasted text, `.log`, `.txt` |
-| Maximum input size | 1 MB |
-| Output | Risk assessment, findings, recommendations, JSON report |
-| Copado integration | Not yet implemented |
+  Attribute                Details
+  ------------------------ ---------------------------------------------------------
+  Project name             ReleasePilot AI
+  Category                 AI / Developer Tools / DevOps
+  Application              Web-based diagnostics dashboard
+  Backend                  Node.js built-in HTTP server
+  Frontend                 HTML, CSS, JavaScript
+  AI provider              Google Gemini API
+  Inputs                   Pasted logs or `.log` / `.txt` files
+  Input limit              1 MB
+  Outputs                  Risk assessment, findings, recommendations, JSON report
+  Live Copado connection   Not implemented
 
 ## Problem Statement
 
-Deployment troubleshooting can be time-consuming when developers must manually inspect large or complex logs to identify the errors preventing a successful release.
+Developers may need to inspect deployment logs manually to find errors
+that prevent a release. This can make it difficult to:
 
-Common challenges include:
+-   Find important errors among informational messages.
+-   Investigate missing metadata or components.
+-   Understand automated test failures.
+-   Diagnose timeouts and dependency problems.
+-   Prioritize issues that need attention.
 
-- Finding important errors among informational messages.
-- Identifying missing metadata or components.
-- Investigating automated test failures.
-- Understanding deployment timeouts and dependency errors.
-- Prioritizing issues that may affect release readiness.
-- Translating technical log messages into actionable next steps.
+## Solution
 
-A lightweight diagnostic tool can help organize this information and reduce the effort needed to begin an investigation.
+ReleasePilot AI lets users submit a deployment log, scans it for known
+patterns, calculates a risk score, and requests AI-assisted explanations
+from Gemini when configured. Results appear in a dashboard and can be
+exported as JSON.
 
-## Our Solution
+## Features
 
-ReleasePilot AI combines a local diagnostic engine with an AI-assisted explanation layer.
+  -----------------------------------------------------------------------
+  Feature                             Description
+  ----------------------------------- -----------------------------------
+  Log upload                          Upload `.log` or `.txt` files up to
+                                      1 MB
 
-1. Developers provide a deployment log.
-2. The local analyzer scans it for supported error patterns.
-3. Detected findings are assigned severity levels and recommendations.
-4. A risk score is calculated from the detected findings.
-5. The structured findings are sent to Gemini when the API is configured.
-6. Gemini returns likely root causes, recommended actions, and caveats.
-7. The dashboard displays the results and supports JSON report export.
+  Paste log content                   Analyze text directly in the
+                                      dashboard
 
-If Gemini is unavailable, the application can still display the local analysis results.
+  Sample log                          Demonstrate the application with
+                                      included sample data
 
----
+  Pattern detection                   Detect supported test, component,
+                                      permission, timeout, and dependency
+                                      errors
 
-## Key Features
+  Severity classification             Label findings as high or medium
 
-| Feature         | Description |
-|---              |---          |
-| Log upload      | Upload `.log` or `.txt` files up to 1 MB |
-| Log input       | Paste deployment-log text directly |
-| Sample log      | Load a sample containing representative deployment issues |
-| Pattern detection | Detect supported test, component, permission, timeout, and dependency errors |
-| Severity classification | Categorize findings as high or medium severity |
-| Risk scoring     | Calculate a score from 0 to 100 using predefined rules |
-| AI root-cause analysis | Use Gemini to explain likely causes from structured findings |
-| Actionable recommendations | Provide suggested investigation and remediation steps |
-| AI fallback        | Preserve local diagnostic results when AI is unavailable |
-| Interactive dashboard | Display scores, issue cards, evidence, and recommendations |
-| JSON export       | Download the diagnostic report for further inspection |
+  Risk scoring                        Calculate a score from 0 to 100
+                                      using predefined rules
+
+  AI root-cause analysis              Generate likely causes and
+                                      investigation suggestions with
+                                      Gemini
+
+  AI fallback                         Keep local findings available when
+                                      AI is unavailable
+
+  Interactive dashboard               View risk, evidence, line numbers,
+                                      and recommendations
+
+  JSON export                         Download a diagnostic report
+  -----------------------------------------------------------------------
 
 ## How It Works
 
-ReleasePilot AI uses deterministic rules for its local findings and an AI model for additional interpretation.
-
-### Supported diagnostic patterns
-
-| Rule ID | Example problem | Severity | Suggested investigation |
-|---|---|---|---|
-| `TEST_FAILURE` | Automated test failure | High | Inspect test results and expected versus actual behavior |
-| `MISSING_COMPONENT` | Component not found | High | Verify component names, paths, dependencies, and package contents |
-| `PERMISSION_ERROR` | Access or permission error | High | Check the relevant permissions and execution context |
-| `TIMEOUT` | Operation exceeds its time limit | Medium | Investigate duration, connectivity, service availability, and limits |
-| `DEPENDENCY_ERROR` | Dependency resolution failure | Medium | Verify required dependencies and configuration |
-
-These are predefined pattern rules. The analyzer does not claim to detect every possible deployment error.
-
-### Diagnostic pipeline
-
-```mermaid
+``` mermaid
 flowchart TD
     A([Start]) --> B[Upload or paste deployment log]
     B --> C{Valid input and size?}
@@ -137,26 +129,22 @@ flowchart TD
     C -- Yes --> E[Run local rule-based analyzer]
     E --> F[Extract findings and evidence]
     F --> G[Calculate risk score]
-    G --> H{Gemini API configured?}
+    G --> H{Gemini configured?}
     H -- No --> I[Use local results only]
     H -- Yes --> J[Send structured findings to Gemini]
     J --> K{AI request successful?}
     K -- Yes --> L[Parse AI explanation]
     K -- No --> I
-    L --> M[Render combined report]
+    L --> M[Render report]
     I --> M
-    M --> N[Review findings and recommendations]
-    N --> O[Export JSON report]
+    M --> N[Review findings]
+    N --> O[Export JSON]
     O --> P([End])
 ```
 
----
+## Architecture
 
-## System Architecture
-
-The application uses a lightweight frontend-backend architecture. The browser communicates with a local Node.js server, which performs rule-based analysis and makes server-side requests to Gemini.
-
-```mermaid
+``` mermaid
 flowchart TB
     subgraph UI["Presentation Layer"]
         A[HTML Dashboard]
@@ -173,10 +161,7 @@ flowchart TB
         I[Report Builder]
     end
 
-    subgraph External["External AI Service"]
-        J[Google Gemini API]
-    end
-
+    J[Google Gemini API]
     K[(Local .env Configuration)]
 
     A --> C
@@ -197,114 +182,84 @@ flowchart TB
 
 ### Component responsibilities
 
-| Component | Responsibility |
-|---|---|
-| `public/index.html` | Dashboard structure and interface elements |
-| `public/style.css` | Layout, visual theme, responsive styling, and component states |
-| `public/app.js` | User interactions, API calls, result rendering, and JSON export |
-| `src/server.js` | HTTP server, request validation, Gemini requests, and report responses |
-| `src/analyzer.js` | Local pattern detection, findings, recommendations, and risk assessment |
-| `test/analyzer.test.js` | Automated tests for core analyzer behavior |
-| `samples/deployment.log` | Sample input for demonstration |
-| `.env` | Local Gemini API key and model configuration; never commit this file |
-| `.agentia_quality_gates.cmd` | Windows quality-gate entry point |
-| `.agentia_quality_gates.sh` | Shell quality-gate entry point |
+  -----------------------------------------------------------------------
+  Component                           Responsibility
+  ----------------------------------- -----------------------------------
+  `public/index.html`                 Dashboard structure
 
----
+  `public/style.css`                  Layout, theme, and responsive
+                                      styling
 
-## Application Workflow
+  `public/app.js`                     Interactions, API calls, rendering,
+                                      and export
 
-The user-facing workflow is designed to be simple.
+  `src/server.js`                     HTTP server, validation, and Gemini
+                                      requests
 
-```mermaid
-flowchart LR
-    A[Open Dashboard] --> B[Provide Log]
-    B --> C[Click Analyze]
-    C --> D[Review Risk Score]
-    D --> E[Inspect Findings]
-    E --> F[Review AI Insights]
-    F --> G[Export JSON]
-```
+  `src/analyzer.js`                   Pattern detection, findings,
+                                      recommendations, and risk scoring
 
-### What users receive
+  `test/analyzer.test.js`             Automated analyzer tests
 
-Each completed local analysis includes:
+  `samples/deployment.log`            Example log for demonstration
 
-- A risk score and risk level.
-- The total number of detected findings.
-- High- and medium-severity counts.
-- Finding titles, rule IDs, line numbers, and evidence.
-- Rule-based recommendations.
-- An AI-generated summary, likely causes, suggested actions, and caveats when Gemini succeeds.
-- A downloadable JSON report.
+  `.env`                              Local Gemini configuration; do not
+                                      commit
 
-AI-generated causes are hypotheses to verify, not confirmed diagnoses.
+  `.agentia_quality_gates.cmd`        Windows quality-gate entry point
+
+  `.agentia_quality_gates.sh`         Shell quality-gate entry point
+  -----------------------------------------------------------------------
 
 ## Risk Scoring
 
-The local analyzer calculates a score using the severity of the detected findings.
+The local analyzer uses a heuristic score based on detected finding
+severity.
 
-### Scoring formula
+Let `H` be the number of high-severity findings and `M` the number of
+medium-severity findings.
 
-Let:
+**Formula:**
 
-- \(H\) = number of high-severity findings.
-- \(M\) = number of medium-severity findings.
+`Risk = min(100, 40 × H + 15 × M)`
 
-The implemented scoring rule is:
+      Score Level
+  --------- ---------
+    70--100 HIGH
+     30--69 MEDIUM
+      1--29 LOW
+          0 MINIMAL
 
-\[
-R = \min(100,\;40H + 15M)
-\]
+### Example using the included sample
 
-### Risk levels
+  Finding                  Severity           Points
+  ------------------------ ---------- --------------
+  Missing component        High                   40
+  Automated test failure   High                   40
+  Operation timed out      Medium                 15
+  **Total**                             **95 / 100**
 
-| Risk score | Level |
-|---:|---|
-| 70–100 | HIGH |
-| 30–69 | MEDIUM |
-| 1–29 | LOW |
-| 0 | MINIMAL |
-
-The score is a heuristic indicator based on supported patterns. It is not a validated probability of deployment failure or a substitute for release approval policies.
-
-### Example
-
-For the included sample log, the analyzer identifies:
-
-| Finding | Severity | Points |
-|---|---|---:|
-| Missing component | High | 40 |
-| Automated test failure | High | 40 |
-| Operation timed out | Medium | 15 |
-| **Total** | | **95 / 100** |
-
-The resulting assessment is **HIGH risk**.
-
----
+This is a heuristic indicator, not a calibrated probability of
+deployment failure or an automated release approval.
 
 ## Technology Stack
 
-| Technology | Purpose |
-|---|---|
-| HTML5 | Dashboard structure |
-| CSS3 | Styling, gradients, cards, and responsive layout |
-| JavaScript | Frontend interactions and dynamic rendering |
-| Node.js | Server runtime |
-| Node.js HTTP module | Local web server and API endpoints |
-| Node.js Fetch API | Server-side Gemini requests |
-| Google Gemini API | AI-assisted interpretation of diagnostic findings |
-| Node.js test runner | Automated tests |
-| Git and GitHub | Version control and project collaboration |
-| Copado Agentia CLI | Hackathon tooling and quality-gate workflow |
-
-The backend uses Node.js built-in modules, so the application does not require a separate web framework for its current implementation.
-
----
+  Technology            Purpose
+  --------------------- ---------------------------------------------
+  HTML5                 Dashboard structure
+  CSS3                  Styling and responsive layout
+  JavaScript            Frontend interactions
+  Node.js               Server runtime
+  Node.js HTTP module   Web server and API
+  Fetch API             Server-side Gemini requests
+  Google Gemini API     AI-assisted explanations
+  Node.js test runner   Automated tests
+  Git and GitHub        Version control
+  Copado Agentia CLI    Hackathon tooling and quality-gate workflow
 
 ## Project Structure
 
-```text
+``` text
 Hackverse/
 ├── .agents/
 │   └── skills/
@@ -329,177 +284,142 @@ Hackverse/
     └── analyzer.test.js
 ```
 
-Local configuration file:
-
-```text
-.env
-```
-
-The `.env` file is intentionally excluded from version control. It should exist locally but must not be committed to the repository.
-
----
+The local `.env` file is intentionally not shown in the tracked project
+structure because it should not be committed.
 
 ## Getting Started
 
 ### Prerequisites
 
-Install the following:
+-   Node.js compatible with the environment-file option used by the
+    start script.
+-   npm.
+-   A Gemini API key for AI explanations. Local rule-based analysis can
+    run without AI.
 
-| Requirement | Purpose |
-|---|---|
-| Node.js 24 or compatible version supporting the configured environment-file option | Run the application |
-| npm | Install dependencies and execute scripts |
-| Git | Clone or manage the repository |
-| Gemini API key | Enable AI analysis; local analysis does not require it |
+### 1. Get the repository
 
-### 1. Clone the repository
+Replace the placeholders with your actual repository URL and folder
+name:
 
-Replace the placeholder with your actual GitHub repository URL.
-
-```bash
+``` bash
 git clone <YOUR_GITHUB_REPOSITORY_URL>
 cd <YOUR_REPOSITORY_FOLDER>
 ```
 
+If you already have the project locally, open its existing folder
+instead.
+
 ### 2. Install dependencies
 
-```bash
+``` bash
 npm install
 ```
 
-### 3. Configure environment variables
+### 3. Configure Gemini
 
-Create a `.env` file in the project root.
+Create a `.env` file in the project root:
 
-```dotenv
+``` dotenv
 GEMINI_API_KEY=your_gemini_api_key_here
 GEMINI_MODEL=gemini-3.1-flash-lite
 ```
 
-Replace the placeholder with your own API key. Never publish your real key.
+Replace the placeholder with your own key. The model name is
+configurable; use a model currently available to your Google AI account.
 
-The model name is configurable. Use a model currently available to your Google AI API account.
+Optionally, create `.env.example` for other developers using
+placeholders only:
 
-### 4. Start the application
-
-```bash
-npm start
-```
-
-The terminal should display the local dashboard URL.
-
-Open:
-
-**http://127.0.0.1:3000**
-
-### 5. Run the sample analysis
-
-1. Click **Load sample**.
-2. Click **Analyze deployment log**.
-3. Review the risk score and detected findings.
-4. Inspect the AI Root Cause Analysis panel.
-5. Click **Export JSON report** to save the results.
-
-The included sample should produce three findings and a risk score of 95.
-
-### Alternative: Run without a Gemini key
-
-The local analyzer can operate without a configured Gemini API key. Start the application and use the dashboard as usual. AI analysis will be unavailable, but local findings can still be displayed.
-
----
-
-## Environment Configuration
-
-| Variable | Required? | Description |
-|---|---|---|
-| `GEMINI_API_KEY` | No, for local-only mode | API credential used for Gemini requests |
-| `GEMINI_MODEL` | No | Gemini model identifier; defaults to `gemini-3.1-flash-lite` |
-| `PORT` | No | Server port; defaults to `3000` |
-
-Keep `.env` private.
-
-For sharing the project, you may add a `.env.example` containing placeholders:
-
-```dotenv
+``` dotenv
 GEMINI_API_KEY=replace_with_your_own_key
 GEMINI_MODEL=gemini-3.1-flash-lite
 ```
 
-Do not put a real API key in `.env.example`, documentation, screenshots, source files, or commits.
+Never place a real API key in source code, screenshots, documentation,
+or Git commits.
 
----
+### 4. Start the server
+
+``` bash
+npm start
+```
+
+Open the URL printed in the terminal. By default, the dashboard is
+available at:
+
+`http://127.0.0.1:3000`
+
+### 5. Try the sample
+
+1.  Click **Load sample**.
+2.  Click **Analyze deployment log**.
+3.  Review the risk score and findings.
+4.  Inspect the AI Root Cause Analysis section.
+5.  Export the JSON report if needed.
+
+The included sample is expected to produce three findings and a score of
+95.
 
 ## Using the Dashboard
 
 ### Input options
 
-**Option 1: Upload a log file**
-
-Choose a `.log` or `.txt` file within the 1 MB limit.
-
-**Option 2: Paste log content**
-
-Paste the relevant deployment output into the text area.
-
-**Option 3: Load the sample**
-
-Use the built-in sample to demonstrate the application without requiring a real deployment log.
+-   **Upload a file:** select a `.log` or `.txt` file within the 1 MB
+    limit.
+-   **Paste text:** place log content in the input area.
+-   **Load sample:** use the included example without needing a real
+    deployment log.
 
 ### Understanding the report
 
-| Dashboard section | What it tells you |
-|---|---|
-| Deployment Risk Score | Heuristic score calculated by the local analyzer |
-| Total Findings | Number of recognized patterns |
-| High Severity | Count of high-severity findings |
-| Medium Severity | Count of medium-severity findings |
-| Detected Issues | Evidence, source line, and recommended action for each finding |
-| AI Root Cause Analysis | Likely causes, suggested actions, and caveats from Gemini |
-| Export JSON | Downloads the latest diagnostic report |
+  -----------------------------------------------------------------------
+  Section                             Meaning
+  ----------------------------------- -----------------------------------
+  Deployment Risk Score               Heuristic score from local rules
 
-### Example input
+  Total Findings                      Number of recognized patterns
 
-```text
-[INFO] Starting release validation
-[INFO] Checking metadata components
-[ERROR] Component not found: AccountSummary
-[ERROR] Test failed: AccountServiceTest
-[WARN] Deployment timed out after 120 seconds
-[INFO] Diagnostic sample completed
-```
+  High Severity                       Count of high-severity findings
 
-This sample demonstrates missing-component detection, automated test failure detection, and timeout detection.
+  Medium Severity                     Count of medium-severity findings
 
----
+  Detected Issues                     Rule ID, line, evidence, and
+                                      recommendation
+
+  AI Root Cause Analysis              Likely causes, actions, and caveats
+                                      from Gemini when available
+
+  Export JSON                         Downloads the diagnostic report
+  -----------------------------------------------------------------------
+
+AI-generated causes are hypotheses to verify, not confirmed diagnoses.
 
 ## API Documentation
 
-The current backend exposes a small HTTP API.
-
 ### `POST /api/analyze`
 
-Analyzes supplied log content and returns the local findings, risk assessment, and AI-analysis status.
+Analyzes the supplied log content and returns the local findings, risk
+assessment, and AI-analysis result or status.
 
-**Request**
+**Request headers**
 
-```http
+``` http
 POST /api/analyze
 Content-Type: application/json
 ```
 
 **Request body**
 
-```json
+``` json
 {
   "content": "[ERROR] Test failed: AccountServiceTest"
 }
 ```
 
-**Response structure**
+**Illustrative response shape**
 
-The response includes the following fields; the exact findings depend on the input log.
-
-```json
+``` json
 {
   "tool": "local-log-analysis",
   "mode": "local-log-analysis",
@@ -524,148 +444,156 @@ The response includes the following fields; the exact findings depend on the inp
 }
 ```
 
-This is an illustrative response structure, not a guaranteed exact response for every log. The full report contains additional fields generated by the analyzer.
-
-When AI analysis is unavailable, `aiAnalysis.status` is `unavailable` and the response includes a message explaining the fallback.
+This is an illustrative response shape, not a guaranteed exact response
+for every log. Actual field names and values depend on the
+implementation and input. When Gemini is unavailable, the server should
+preserve local results and indicate AI unavailability.
 
 ### HTTP status codes
 
-| Status | Meaning |
-|---|---|
-| `200 OK` | Analysis completed, including possible local-only fallback |
-| `400 Bad Request` | Invalid JSON or invalid input structure |
-| `404 Not Found` | Unknown route |
-| `413 Payload Too Large` | Request body exceeds the 1 MB limit |
-| `500 Internal Server Error` | Dashboard asset could not be served |
-
-A Gemini API failure does not necessarily cause the local analysis endpoint to fail. The server is designed to return the local report with an AI-unavailable status.
-
----
+  Status                        Meaning
+  ----------------------------- -------------------------------------
+  `200 OK`                      Analysis returned
+  `400 Bad Request`             Invalid JSON or input
+  `404 Not Found`               Unknown route
+  `413 Payload Too Large`       Request exceeds the 1 MB limit
+  `500 Internal Server Error`   Dashboard asset could not be served
 
 ## Testing
 
-Run the automated test suite:
+Run the automated tests:
 
-```bash
+``` bash
 npm test
 ```
 
 The current analyzer tests cover:
 
-| Test | Purpose |
-|---|---|
-| Test failures and missing components | Verify known error detection |
-| Clean log | Verify behavior when no supported patterns are found |
-| Line numbers | Verify finding locations |
-| Invalid input type | Reject non-string analyzer input |
+  Test                                   Purpose
+  -------------------------------------- ----------------------------------
+  Test failures and missing components   Verify known error detection
+  Clean log                              Verify no known-pattern findings
+  Line numbers                           Verify finding locations
+  Invalid input type                     Reject non-string analyzer input
 
-Run the sample analyzer directly:
+Run the sample analyzer:
 
-```bash
+``` bash
 npm run analyze:sample
 ```
 
-Run the configured Copado Agentia quality-gate script on Windows:
+On Windows, run the configured Agentia quality-gate script:
 
-```powershell
+``` powershell
 .\.agentia_quality_gates.cmd
 ```
 
-The quality-gate script depends on its configured checks and the local Agentia environment.
-
 ### Manual verification checklist
 
-- [ ] The dashboard loads at `http://127.0.0.1:3000`.
-- [ ] The sample log loads correctly.
-- [ ] The sample produces three findings and a risk score of 95.
-- [ ] Gemini analysis appears when the API is available.
-- [ ] Local analysis remains available when Gemini fails.
-- [ ] A clean log produces no known-pattern findings.
-- [ ] Empty input produces a validation message.
-- [ ] JSON export downloads a report.
-- [ ] The API key is not exposed in frontend code.
-- [ ] `.env` is excluded from Git.
-
----
+-   [ ] Dashboard loads at `http://127.0.0.1:3000`.
+-   [ ] Sample log loads and analyzes.
+-   [ ] Sample produces three findings and a score of 95.
+-   [ ] Gemini analysis appears when the API is available.
+-   [ ] Local analysis remains available if Gemini fails.
+-   [ ] A clean log produces no known-pattern findings.
+-   [ ] Empty input is handled appropriately.
+-   [ ] JSON export works.
+-   [ ] The API key is not exposed in frontend code.
+-   [ ] `.env` is excluded from Git.
 
 ## Security and Privacy
 
-ReleasePilot AI is a prototype, so log handling and external AI requests require care.
+-   **API key protection:** the Gemini key is configured on the server
+    through an environment variable.
+-   **Input limit:** request bodies are limited to 1 MB.
+-   **Server-side AI requests:** the browser should not call Gemini
+    directly with the secret key.
+-   **External processing:** structured diagnostic findings are sent to
+    Google Gemini when AI analysis is enabled.
+-   **Sensitive logs:** do not submit confidential, personal, or
+    production-sensitive data unless permitted by your organization's
+    policies.
+-   **No live deployment access:** this prototype does not retrieve
+    actual Copado or Salesforce deployment status.
+-   **Quotas and costs:** API availability, limits, and charges depend
+    on your Google AI account, model, and applicable terms.
 
-- **API key protection:** the Gemini key is read by the server from an environment variable.
-- **Input limit:** request bodies are limited to 1 MB.
-- **Server-side AI requests:** the browser does not call Gemini directly with the API key.
-- **Reduced AI payload:** the implementation sends structured findings and risk information rather than the entire original log.
-- **Safe rendering:** the frontend uses text-based DOM rendering for report values.
-- **No live deployment access:** the current implementation does not connect to Copado or Salesforce.
-- **External processing:** structured diagnostic findings are sent to Google Gemini when AI analysis is enabled. Avoid including confidential, personal, or production-sensitive information in logs used for AI analysis.
-- **API quotas and costs:** availability, limits, and charges depend on the Google AI account, model, and applicable usage terms.
-
-Before using this tool with production data, review your organization's logging, data-handling, and AI-service policies.
-
----
+Review the implementation and your organization's data-handling policies
+before using this with production data.
 
 ## Limitations
 
-The current prototype has the following boundaries:
+1.  Local detection is limited to implemented pattern rules.
+2.  The risk score is heuristic, not a statistically validated failure
+    probability.
+3.  Gemini may produce incomplete or incorrect explanations; verify
+    recommendations.
+4.  Live Copado and Salesforce integration is not implemented.
+5.  The tool does not automatically apply fixes or redeploy software.
+6.  The server binds to `127.0.0.1` by default.
+7.  Authentication, multi-user access, and persistent report history are
+    outside the current prototype scope.
 
-1. **Pattern-based local detection:** only implemented rules are recognized automatically.
-2. **Heuristic risk score:** the score is not a statistically calibrated failure probability.
-3. **AI uncertainty:** Gemini may suggest an incorrect or incomplete cause; recommendations require verification.
-4. **No live Copado connection:** the application does not retrieve actual deployment jobs or statuses from Copado.
-5. **No automatic remediation:** the tool does not apply fixes, change configuration, or redeploy software.
-6. **Local server:** the dashboard is bound to `127.0.0.1` by default.
-7. **Prototype scope:** authentication, multi-user access, persistent report storage, and production deployment workflows are not implemented as part of the current scope.
+## Roadmap
 
----
+  -----------------------------------------------------------------------
+  Priority                Planned improvement     Benefit
+  ----------------------- ----------------------- -----------------------
+  High                    Add more diagnostic     Recognize more failure
+                          rules and tests         patterns
 
-## Future Roadmap
+  High                    Improve input           Improve reliability
+                          validation and error    
+                          messages                
 
-| Priority | Planned enhancement | Expected benefit |
-|---|---|---|
-| High | Expand test coverage and diagnostic rules | Recognize more failure patterns |
-| High | Improve validation and error reporting | Make troubleshooting more reliable |
-| High | Add real Copado API integration | Analyze real deployment data after proper authorization |
-| Medium | Add report history and comparison | Track recurring errors across releases |
-| Medium | Add severity filters and search | Make large reports easier to navigate |
-| Medium | Add CI/CD integrations | Support diagnostics in automated workflows |
-| Medium | Add downloadable PDF reports | Simplify sharing and documentation |
-| Future | Add authenticated multi-user access | Support team workflows |
-| Future | Add verified remediation workflows | Help developers act on findings with appropriate safeguards |
+  High                    Implement authorized    Analyze real deployment
+                          Copado API integration  data
 
-These are proposed improvements, not features currently available.
+  Medium                  Add report history and  Track recurring issues
+                          comparison              
 
----
+  Medium                  Add filtering and       Navigate larger reports
+                          search                  
+
+  Medium                  Add PDF export          Share reports more
+                                                  easily
+
+  Future                  Add authenticated team  Support collaborative
+                          access                  workflows
+
+  Future                  Add safeguarded         Help developers act on
+                          remediation workflows   verified findings
+  -----------------------------------------------------------------------
+
+These are proposed improvements, not current capabilities.
 
 ## Contributing
 
-Contributions that improve diagnostic accuracy, test coverage, usability, documentation, or security are welcome.
+Contributions to diagnostic accuracy, tests, usability, documentation,
+and security are welcome.
 
-Suggested workflow:
+1.  Fork the repository.
+2.  Create a feature branch.
+3.  Implement your change.
+4.  Add or update tests.
+5.  Run `npm test`.
+6.  Open a pull request with a clear description.
 
-1. Fork the repository.
-2. Create a feature branch.
-3. Implement the change.
-4. Add or update tests.
-5. Run `npm test`.
-6. Submit a pull request with a clear description of the change.
-
-For new diagnostic rules, include representative test cases and document the expected severity and recommendation.
+New diagnostic rules should include test cases and document their
+severity and recommended investigation.
 
 ## License
 
-No license has been specified for this project yet.
-
-Before publishing the repository for reuse, add a `LICENSE` file that reflects your intended licensing terms and any applicable hackathon requirements.
-
----
+A license has not yet been specified. Add a `LICENSE` file that reflects
+your intended reuse terms and any applicable hackathon requirements
+before inviting external reuse.
 
 ## Acknowledgements
 
-- Google Gemini API for AI-assisted diagnostic explanations.
-- Copado Agentia tooling for the hackathon development workflow.
-- The open-source developer community for tools and practices that support reliable software delivery.
+-   Google Gemini API for AI-assisted explanations.
+-   Copado Agentia tooling for the hackathon development workflow.
+-   The open-source developer community.
 
----
+------------------------------------------------------------------------
 
-**ReleasePilot AI — Turn deployment logs into actionable insights.**
+**ReleasePilot AI --- Turn deployment logs into actionable insights.**
